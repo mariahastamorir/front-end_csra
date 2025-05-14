@@ -5,8 +5,11 @@ import { ContactenosComponent } from './components/contactenos/contactenos.compo
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PaginaprincipalComponent } from './components/paginaprincipal/paginaprincipal.component';
 import { CambiarContrasenaComponent } from './components/cambiar-contrasena/cambiar-contrasena.component';
-import { ActivosComponent } from './components/activos/activos.component';
+import { ActivosComponent } from './components/activos-components/activos/activos.component';
 import { RegistrousuariosComponent } from './components/registrousuarios/registrousuarios.component';
+import { authGuard } from './guards/auth.guard';
+import { ConfiguracionActivosComponent } from './components/activos-components/configuracion-activos/configuracion-activos.component';
+import { GapComponent } from './components/GAP-components/gap/gap.component';
 
 const routes: Routes = [
   {
@@ -23,15 +26,28 @@ const routes: Routes = [
   },
   {
     path: 'changepassword',
-    component: CambiarContrasenaComponent
+    component: CambiarContrasenaComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'homepage',
-    component: PaginaprincipalComponent
+    component: PaginaprincipalComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'assets',
-    component: ActivosComponent
+    component: ActivosComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'configAssets',
+    component: ConfiguracionActivosComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'gap',
+    component: GapComponent,
+    canActivate: [authGuard]
   }
 ];
 

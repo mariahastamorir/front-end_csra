@@ -1,0 +1,95 @@
+<div class="model-open" *ngIf="isOpen">
+    <div class="modal">
+        
+        <!-- Mostrar el spinner mientras isLoading sea true -->
+        <div *ngIf="isLoading" class="loading-overlay">
+            <div class="spinner"></div> <!-- Puedes personalizar el spinner -->
+        </div>
+        <form [formGroup]="activoEditForm"  *ngIf="!isLoading">
+            <h3>Editar activo</h3>
+        <section class="modal-top">
+            <div class="one-group">
+                <label for="">Nombre del activo</label>
+                <input class="options-one" formControlName="nombre">
+            </div>
+            <div class="one-group">
+                <label for="">Proceso / Área</label>
+                <select formControlName="proceso_area" >
+                    <option *ngFor="let item of proceso1" [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+            <div class="one-group">
+                <label for="">Tipo de activo</label>
+                <select formControlName="tipo_activo">
+                    <option *ngFor="let item of tipodeactivo1" [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+        </section>
+        <div class="two-group">
+            <label>Descripción / Observaciones</label>
+            <input formControlName="descripcion">
+        </div>
+        <h4>Criterios de clasificación</h4>
+        <div formGroupName="estadoxactivo">
+            <section class="modal-top">
+                <div class="three-group">
+                    <label>Confidencialidad</label>
+                    <select formControlName="confidencialidad">
+                        <option *ngFor="let item of confidencialidad1" [value]="item.id">
+                            {{ item.estado }}
+                        </option>
+                    </select>
+                </div>
+                <div class="three-group">
+                    <label>Integridad</label>
+                    <select formControlName="integridad">
+                        <option *ngFor="let item of integridad1" [value]="item.id">
+                            {{item.estado}}
+                        </option>
+                    </select>
+                </div>
+                <div class="three-group">
+                    <label>Disponibilidad</label>
+                    <select formControlName="disponibilidad">
+                        <option *ngFor="let item of disponibilidad1" [value]="item.id">
+                            {{item.estado}}
+                        </option>
+                    </select>
+                </div>
+            </section>
+        </div>
+        <section class="modal-top">
+            <div class="one-group">
+                <label for="">Datos personales</label>
+                <select formControlName="datos_personales">
+                    <option *ngFor="let item of datospersonales1" [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+            <div class="one-group">
+                <label for="">Dueño del activo</label>
+                <select formControlName="dueno_activo">
+                    <option *ngFor="let item of duenodeactivo1" [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+            <div class="one-group">
+                <label for="">Custodio</label>
+                <select formControlName="custodio">
+                    <option *ngFor="let item of custodio1" [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+        </section>
+            <button class="activo" (click)="onSubmit()" >Actualizar activo</button>
+            <button class="cancelar" (click)="closeModalUpdate()">Cancelar</button>
+        </form>
+    </div>
+</div>

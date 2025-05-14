@@ -33,12 +33,21 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
-
+  
       this.loginService.login(credentials).subscribe(
         response => {
           console.log('Login exitoso:', response);
-          localStorage.setItem('token', response.token); // Guardar token en localStorage
-          // Redirigir al usuario o mostrar mensaje de éxito
+          localStorage.setItem('token', response.token);
+  
+          // Guardar la hora de inicio de sesión
+          const now = new Date().getTime();
+          localStorage.setItem('loginTime', now.toString());
+  
+          // Iniciar el monitoreo de inactividad
+          this.loginService.startMonitoringInactivity();
+  
+          // Redirigir al homepage
+          this.router.navigate(['/homepage']);
         },
         error => {
           console.error('Error en el login:', error);
@@ -46,8 +55,9 @@ export class LoginComponent {
         }
       );
     } else {
-      console.log('El formulario no es válido.');
       this.errorMessage = 'Por favor, complete todos los campos correctamente.';
     }
   }
+  
+
 }

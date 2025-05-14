@@ -1,15 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisteruserService } from '../../services/registeruser.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registrousuarios',
   standalone: false,
   templateUrl: './registrousuarios.component.html',
-  styleUrl: './registrousuarios.component.css'
+  styleUrls: ['./registrousuarios.component.css']
 })
-export class RegistrousuariosComponent {
+export class RegistrousuariosComponent implements OnInit {
   registerForm: FormGroup;
+  showPassword: boolean = false;
+  tipoDocumentos: any[] = [];
+  roles: any[] = [];
 
   constructor(private fb: FormBuilder, private registerUserService: RegisteruserService) {
     this.registerForm = this.fb.group({
@@ -19,25 +23,63 @@ export class RegistrousuariosComponent {
       numero_documento: ['', [Validators.pattern('^[0-9]{6,12}$')]], 
       telefono: ['', [Validators.pattern('^[0-9]{7,15}$')]],
       empresa: ['', [Validators.minLength(2), Validators.maxLength(50)]],
-      rolxpermiso: ['', [Validators.minLength(3), Validators.maxLength(30)]],
-      password: ['', [Validators.required, Validators.minLength(6)]] // Obligatorio
+      rolxpermiso: [''],
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)]]
     });
+  }
+
+  ngOnInit(): void {
+    // Cargar tipos de documento
+    this.registerUserService.getTipoDocumentos().subscribe(data => {
+      this.tipoDocumentos = data;
+    });
+
+    // Cargar roles
+    this.registerUserService.getRoles().subscribe(data => {
+      this.roles = data;
+    });
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      console.log('Datos a enviar:', this.registerForm.value); //Agrega esto para depuración
+  
       this.registerUserService.registerUser(this.registerForm.value).subscribe(
         response => {
           console.log('Registro exitoso', response);
-          alert('Usuario registrado correctamente');
+          Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Usuario registrado correctamente',
+            confirmButtonColor: '#28A745'
+          }).then(() => {
+            this.registerForm.reset();
+          });
         },
         error => {
           console.log('Error en el registro', error);
-          alert('Usuario no registrado');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al registrar el usuario',
+            confirmButtonColor: '#d33'
+          });
         }
       );
     } else {
-      alert('Debe completar los campos correctamente.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario incompleto',
+        text: 'Debe completar los campos correctamente.',
+        confirmButtonColor: '#f0ad4e'
+      });
     }
   }
+  
+  
+
 }

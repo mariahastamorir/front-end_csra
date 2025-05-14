@@ -1,0 +1,13 @@
+<app-navbar></app-navbar>
+
+<div class="title">
+    <h1>Configuración Activos</h1>
+</div>
+
+<section class="button-config">
+    <button (click)="mostrar('formulas')">Formulas</button>
+    <button (click)="mostrar('tablas')">Tablas</button>
+</section>
+
+<app-config-calculadora *ngIf="seleccionado === 'formulas'"></app-config-calculadora>
+<app-config-tablas *ngIf="seleccionado === 'tablas'"></app-config-tablas>
